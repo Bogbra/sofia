@@ -1,4 +1,4 @@
-# Sofia's Photography
+# Sofia's Visual Archive
 
 A photography portfolio built with Next.js, React Three Fiber, Three.js and GSAP. The landing page presents selected work in a draggable, full-bleed spherical gallery — click any image to open it in a lightbox.
 

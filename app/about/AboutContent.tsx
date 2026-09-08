@@ -48,7 +48,7 @@ export default function AboutContent() {
 
           <div className="about-copy">
             <p className="lead">
-              Sofia's photography is a personal portfolio created as a space for quiet observations,
+              Sofia's visual archive is a personal portfolio created as a space for quiet observations,
               visual experiments and selected stories.
             </p>
             <p>

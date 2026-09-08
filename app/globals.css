@@ -64,6 +64,7 @@ body {
   margin: 0;
   min-height: 100%;
   background: var(--paper);
+  overflow-x: hidden;
 }
 
 @media (pointer: fine) {
@@ -114,7 +115,6 @@ body {
 }
 
 body {
-  overflow-x: hidden;
   color: var(--ink);
   font-family: var(--font-body);
   font-size: var(--text-size);
@@ -411,22 +411,17 @@ button {
 }
 
 #main-content {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 1;
   background: var(--paper);
 }
 
-.footer-reveal-spacer {
-  height: calc(var(--frame-bottom) + 20px);
-}
-
-/* Footer outside the film frame; sits behind #main-content so it's revealed on scroll */
+/* Footer sits in normal flow right after #main-content; the sticky main
+   content covers it until scroll reaches the very end, "revealing" it.
+   Avoids position: fixed, whose repaint-on-scroll is unreliable on iOS Safari. */
 .site-footer {
-  position: fixed;
-  z-index: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  position: relative;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;

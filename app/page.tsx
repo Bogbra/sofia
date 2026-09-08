@@ -43,7 +43,7 @@ export default function HomePage() {
       <div ref={root} className="home-stage">
         <FloatingGallery />
 
-        <header className="hero-title" aria-label="Sofia's Photography">
+        <header className="hero-title" aria-label="Sofia's Visual Archive">
           <h1>Sofia's</h1>
           <p>Visual Archive</p>
         </header>

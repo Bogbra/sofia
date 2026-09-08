@@ -4,7 +4,7 @@ import AboutContent from "./AboutContent";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Sofia's photography is a personal portfolio created as a space for quiet observations, visual experiments and selected stories.",
+    "Sofia's visual archive is a personal portfolio created as a space for quiet observations, visual experiments and selected stories.",
   alternates: { canonical: "/about" },
 };
 

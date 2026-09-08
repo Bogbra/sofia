@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 const routes: { path: string; title: RegExp }[] = [
-  { path: "/", title: /Sofia's Photography/ },
+  { path: "/", title: /Sofia's Visual Archive/ },
   { path: "/about", title: /About/ },
   { path: "/contact", title: /Contact/ },
   { path: "/impressum", title: /Impressum/ },

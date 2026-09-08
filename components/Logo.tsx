@@ -3,7 +3,7 @@ export default function Logo({ className }: { className?: string }) {
     <span
       className={`logo-mark${className ? ` ${className}` : ""}`}
       role="img"
-      aria-label="Sofia's Photography"
+      aria-label="Sofia's Visual Archive"
     />
   );
 }

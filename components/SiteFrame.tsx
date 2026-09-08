@@ -87,7 +87,7 @@ export default function SiteFrame({ children }: PropsWithChildren) {
 
       <CustomCursor />
 
-      <Link href="/" className="site-logo" aria-label="Sofia's Photography — Home" />
+      <Link href="/" className="site-logo" aria-label="Sofia's Visual Archive — Home" />
 
       <ThemeToggle />
 
@@ -109,8 +109,6 @@ export default function SiteFrame({ children }: PropsWithChildren) {
       <main id="main-content" tabIndex={-1}>
         {children}
       </main>
-
-      <div className="footer-reveal-spacer" aria-hidden="true" />
 
       <footer className="site-footer">
         <nav className="legal-links" aria-label="Legal navigation">

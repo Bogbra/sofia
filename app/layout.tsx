@@ -16,9 +16,9 @@ const inter = Inter({
   display: "swap",
 });
 
-const title = "Sofia's Photography";
+const title = "Sofia's Visual Archive";
 const description =
-  "Sofia's photography is a personal portfolio for visual stories, quiet observations and selected work.";
+  "Sofia's visual archive is a personal portfolio for visual stories, quiet observations and selected work.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
