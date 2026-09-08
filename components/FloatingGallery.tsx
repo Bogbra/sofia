@@ -19,7 +19,6 @@ const artworks: ArtworkSpec[] = [
   { src: "/artworks/Baustelle.webp", thumbSrc: "/artworks/gallery/Baustelle.webp", title: "Baustelle" },
   { src: "/artworks/Blatt.webp", thumbSrc: "/artworks/gallery/Blatt.webp", title: "Blatt" },
   { src: "/artworks/Building.webp", thumbSrc: "/artworks/gallery/Building.webp", title: "Building" },
-  { src: "/artworks/Ghost.webp", thumbSrc: "/artworks/gallery/Ghost.webp", title: "Ghost" },
   { src: "/artworks/Jazz.webp", thumbSrc: "/artworks/gallery/Jazz.webp", title: "Jazz" },
   { src: "/artworks/Jovan.webp", thumbSrc: "/artworks/gallery/Jovan.webp", title: "Jovan" },
   { src: "/artworks/MFH.webp", thumbSrc: "/artworks/gallery/MFH.webp", title: "MFH" },
