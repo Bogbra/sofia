@@ -194,8 +194,8 @@ button {
 
 .logo-mark {
   display: block;
-  -webkit-mask-image: url("/LOGO.svg");
-  mask-image: url("/LOGO.svg");
+  -webkit-mask-image: url("/SVA_LOGO.svg");
+  mask-image: url("/SVA_LOGO.svg");
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -215,8 +215,8 @@ button {
   pointer-events: auto;
   color: var(--mark);
   mix-blend-mode: difference;
-  -webkit-mask-image: url("/LOGO.svg");
-  mask-image: url("/LOGO.svg");
+  -webkit-mask-image: url("/SVA_LOGO.svg");
+  mask-image: url("/SVA_LOGO.svg");
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
