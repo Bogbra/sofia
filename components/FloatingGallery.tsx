@@ -153,7 +153,7 @@ function Scene({ onSelect }: { onSelect: (index: number) => void }) {
   const rotation = useRef({ x: -0.03, y: 0 });
   const velocity = useRef({ x: 0, y: 0.00055 });
   const dragDistance = useRef(0);
-  const { gl, viewport, invalidate } = useThree();
+  const { gl, viewport } = useThree();
 
   useEffect(() => {
     const element = gl.domElement;
@@ -173,7 +173,6 @@ function Scene({ onSelect }: { onSelect: (index: number) => void }) {
       velocity.current.x = dy * 0.0001;
       drag.current.x = event.clientX;
       drag.current.y = event.clientY;
-      invalidate();
     };
     const up = () => {
       drag.current.active = false;
@@ -186,15 +185,7 @@ function Scene({ onSelect }: { onSelect: (index: number) => void }) {
       element.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
     };
-  }, [gl, invalidate]);
-
-  // frameloop="demand" only renders when invalidated; drive the idle
-  // rotation/bob at ~30fps instead of the display's full refresh rate to
-  // cut the WebGL scene's steady-state main-thread cost.
-  useEffect(() => {
-    const id = window.setInterval(() => invalidate(), 1000 / 30);
-    return () => window.clearInterval(id);
-  }, [invalidate]);
+  }, [gl]);
 
   const reducedMotion = useRef(false);
 
@@ -267,10 +258,10 @@ export default function FloatingGallery() {
           </ul>
 
           <Canvas
-            dpr={[1, 1.5]}
-            frameloop={lightboxIndex !== null ? "never" : "demand"}
+            dpr={[1, 1.75]}
+            frameloop={lightboxIndex !== null ? "never" : "always"}
             camera={{ position: [0, 0, 11.8], fov: 42, near: 0.1, far: 100 }}
-            gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+            gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
             onCreated={({ gl }) => {
               gl.domElement.addEventListener("webglcontextlost", (event) => {
                 event.preventDefault();
