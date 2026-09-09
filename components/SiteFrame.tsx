@@ -34,9 +34,9 @@ export default function SiteFrame({ children }: PropsWithChildren) {
         {
           y: 0,
           opacity: 1,
-          duration: reduced ? 0 : 1.05,
+          duration: reduced ? 0 : 0.6,
           ease: "power3.out",
-          stagger: reduced ? 0 : 0.08,
+          stagger: reduced ? 0 : 0.05,
           clearProps: "transform",
         }
       );

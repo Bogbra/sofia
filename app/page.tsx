@@ -22,10 +22,9 @@ export default function HomePage() {
         {
           y: 0,
           opacity: 1,
-          duration: reduced ? 0 : 1.25,
-          stagger: reduced ? 0 : 0.11,
+          duration: reduced ? 0 : 0.7,
+          stagger: reduced ? 0 : 0.08,
           ease: "power3.out",
-          delay: reduced ? 0 : 0.35,
         }
       );
       gsap.fromTo(

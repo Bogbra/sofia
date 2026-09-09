@@ -3,7 +3,7 @@
 import { Canvas, ThreeEvent, useFrame, useLoader, useThree } from "@react-three/fiber";
 import gsap from "gsap";
 import * as THREE from "three";
-import { MutableRefObject, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { RefObject, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Lightbox from "@/components/Lightbox";
 import { prefersReducedMotion } from "@/lib/motion";
 
@@ -86,7 +86,7 @@ function Artwork({
   index: number;
   total: number;
   onSelect: (index: number) => void;
-  dragDistance: MutableRefObject<number>;
+  dragDistance: RefObject<number>;
 }) {
   const texture = useLoader(THREE.TextureLoader, item.thumbSrc);
   const group = useRef<THREE.Group>(null);
@@ -222,14 +222,15 @@ function Scene({ onSelect }: { onSelect: (index: number) => void }) {
   return (
     <group ref={world} scale={scale}>
       {artworks.map((item, index) => (
-        <Artwork
-          key={item.src}
-          item={item}
-          index={index}
-          total={artworks.length}
-          onSelect={onSelect}
-          dragDistance={dragDistance}
-        />
+        <Suspense key={item.src} fallback={null}>
+          <Artwork
+            item={item}
+            index={index}
+            total={artworks.length}
+            onSelect={onSelect}
+            dragDistance={dragDistance}
+          />
+        </Suspense>
       ))}
     </group>
   );
