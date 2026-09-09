@@ -2,7 +2,7 @@
 
 import { Canvas, ThreeEvent, useFrame, useLoader, useThree } from "@react-three/fiber";
 import gsap from "gsap";
-import * as THREE from "three";
+import { DoubleSide, Group, MathUtils, TextureLoader, Vector3 } from "three";
 import { RefObject, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Lightbox from "@/components/Lightbox";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -68,7 +68,7 @@ function spherePosition(index: number, total: number) {
   const y = 1 - (index / (total - 1)) * 2;
   const radius = Math.sqrt(1 - y * y);
   const theta = golden * index;
-  return new THREE.Vector3(
+  return new Vector3(
     Math.cos(theta) * radius * 7.4,
     y * 4.4,
     Math.sin(theta) * radius * 5.4
@@ -88,8 +88,8 @@ function Artwork({
   onSelect: (index: number) => void;
   dragDistance: RefObject<number>;
 }) {
-  const texture = useLoader(THREE.TextureLoader, item.thumbSrc);
-  const group = useRef<THREE.Group>(null);
+  const texture = useLoader(TextureLoader, item.thumbSrc);
+  const group = useRef<Group>(null);
   const maxDimension = index % 4 === 0 ? 2.6 : index % 3 === 0 ? 2.15 : 1.75;
   const aspect = texture.image.width / texture.image.height;
   const width = aspect >= 1 ? maxDimension : maxDimension * aspect;
@@ -141,19 +141,19 @@ function Artwork({
         renderOrder={2}
       >
         <planeGeometry args={[width, height]} />
-        <meshBasicMaterial map={texture} side={THREE.DoubleSide} toneMapped={false} />
+        <meshBasicMaterial map={texture} side={DoubleSide} toneMapped={false} />
       </mesh>
     </group>
   );
 }
 
 function Scene({ onSelect }: { onSelect: (index: number) => void }) {
-  const world = useRef<THREE.Group>(null);
+  const world = useRef<Group>(null);
   const drag = useRef({ active: false, x: 0, y: 0 });
   const rotation = useRef({ x: -0.03, y: 0 });
   const velocity = useRef({ x: 0, y: 0.00055 });
   const dragDistance = useRef(0);
-  const { gl, viewport } = useThree();
+  const { gl, viewport, invalidate } = useThree();
 
   useEffect(() => {
     const element = gl.domElement;
@@ -168,11 +168,12 @@ function Scene({ onSelect }: { onSelect: (index: number) => void }) {
       const dy = event.clientY - drag.current.y;
       dragDistance.current += Math.abs(dx) + Math.abs(dy);
       rotation.current.y += dx * 0.004;
-      rotation.current.x = THREE.MathUtils.clamp(rotation.current.x + dy * 0.0024, -0.42, 0.42);
+      rotation.current.x = MathUtils.clamp(rotation.current.x + dy * 0.0024, -0.42, 0.42);
       velocity.current.y = dx * 0.00022;
       velocity.current.x = dy * 0.0001;
       drag.current.x = event.clientX;
       drag.current.y = event.clientY;
+      invalidate();
     };
     const up = () => {
       drag.current.active = false;
@@ -185,7 +186,15 @@ function Scene({ onSelect }: { onSelect: (index: number) => void }) {
       element.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
     };
-  }, [gl]);
+  }, [gl, invalidate]);
+
+  // frameloop="demand" only renders when invalidated; drive the idle
+  // rotation/bob at ~30fps instead of the display's full refresh rate to
+  // cut the WebGL scene's steady-state main-thread cost.
+  useEffect(() => {
+    const id = window.setInterval(() => invalidate(), 1000 / 30);
+    return () => window.clearInterval(id);
+  }, [invalidate]);
 
   const reducedMotion = useRef(false);
 
@@ -207,11 +216,11 @@ function Scene({ onSelect }: { onSelect: (index: number) => void }) {
     if (!world.current) return;
     if (!drag.current.active && !reducedMotion.current) {
       rotation.current.y += velocity.current.y * delta * 60;
-      velocity.current.y = THREE.MathUtils.lerp(velocity.current.y, 0.00055, 0.025);
+      velocity.current.y = MathUtils.lerp(velocity.current.y, 0.00055, 0.025);
       velocity.current.x *= 0.96;
     }
-    world.current.rotation.x = THREE.MathUtils.lerp(world.current.rotation.x, rotation.current.x, 0.08);
-    world.current.rotation.y = THREE.MathUtils.lerp(world.current.rotation.y, rotation.current.y, 0.08);
+    world.current.rotation.x = MathUtils.lerp(world.current.rotation.x, rotation.current.x, 0.08);
+    world.current.rotation.y = MathUtils.lerp(world.current.rotation.y, rotation.current.y, 0.08);
     world.current.position.y = reducedMotion.current
       ? 0
       : Math.sin(state.clock.elapsedTime * 0.32) * 0.12;
@@ -258,10 +267,10 @@ export default function FloatingGallery() {
           </ul>
 
           <Canvas
-            dpr={[1, 1.75]}
-            frameloop={lightboxIndex !== null ? "never" : "always"}
+            dpr={[1, 1.5]}
+            frameloop={lightboxIndex !== null ? "never" : "demand"}
             camera={{ position: [0, 0, 11.8], fov: 42, near: 0.1, far: 100 }}
-            gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+            gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
             onCreated={({ gl }) => {
               gl.domElement.addEventListener("webglcontextlost", (event) => {
                 event.preventDefault();
