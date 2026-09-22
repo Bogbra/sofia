@@ -27,7 +27,7 @@ export default function DatenschutzPage() {
             <h2>2. Bereitstellung der Website</h2>
             <p>
               Diese Website wird bei Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, USA
-              („Vercel") gehostet. Beim Aufruf der Website verarbeitet Vercel technisch erforderliche
+              („Vercel“) gehostet. Beim Aufruf der Website verarbeitet Vercel technisch erforderliche
               Daten wie IP-Adresse, Zeitpunkt des Zugriffs, aufgerufene Seite, Browsertyp und
               Betriebssystem in Server-Logfiles, um die Website auszuliefern und den Betrieb sicher und
               stabil zu halten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an

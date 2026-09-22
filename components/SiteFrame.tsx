@@ -22,6 +22,12 @@ export default function SiteFrame({ children }: PropsWithChildren) {
   const overlay = useRef<HTMLDivElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [prevPathname, setPrevPathname] = useState(pathname);
+
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
+    setMenuOpen(false);
+  }
 
   useFocusTrap(overlay, menuOpen);
 
@@ -44,10 +50,6 @@ export default function SiteFrame({ children }: PropsWithChildren) {
 
     return () => ctx.revert();
   }, []);
-
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     if (!menuOpen) return;

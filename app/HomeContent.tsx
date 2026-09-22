@@ -1,0 +1,55 @@
+"use client";
+
+import dynamic from "next/dynamic";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import SiteFrame from "@/components/SiteFrame";
+import { prefersReducedMotion } from "@/lib/motion";
+import type { ArtworkSpec } from "@/lib/artworks";
+
+const FloatingGallery = dynamic(() => import("@/components/FloatingGallery"), {
+  ssr: false,
+});
+
+export default function HomeContent({ artworks }: { artworks: ArtworkSpec[] }) {
+  const root = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const reduced = prefersReducedMotion();
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".hero-title > *",
+        { y: reduced ? 0 : 18, opacity: reduced ? 1 : 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: reduced ? 0 : 0.7,
+          stagger: reduced ? 0 : 0.08,
+          ease: "power3.out",
+        }
+      );
+      gsap.fromTo(
+        ".drag-hint",
+        { opacity: reduced ? 0.58 : 0 },
+        { opacity: 0.58, duration: reduced ? 0 : 1.2, delay: reduced ? 0 : 1.4 }
+      );
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <SiteFrame>
+      <div ref={root} className="home-stage">
+        <FloatingGallery artworks={artworks} />
+
+        <header className="hero-title" aria-label="Sofia's Visual Archive">
+          <h1>Sofia’s</h1>
+          <p>Visual Archive</p>
+        </header>
+
+        <p className="drag-hint">Drag to explore</p>
+      </div>
+    </SiteFrame>
+  );
+}
