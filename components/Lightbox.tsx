@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -8,6 +9,9 @@ import { useFocusTrap } from "@/lib/useFocusTrap";
 type LightboxArtwork = {
   src: string;
   title: string;
+  alt: string;
+  width: number;
+  height: number;
 };
 
 export default function Lightbox({
@@ -88,10 +92,14 @@ export default function Lightbox({
         </button>
       )}
 
-      <img
+      <Image
         key={current.src}
         src={current.src}
-        alt={current.title}
+        alt={current.alt}
+        width={current.width}
+        height={current.height}
+        sizes="(max-width: 600px) calc(100vw - 60px), (max-width: 900px) calc(100vw - 100px), calc(100vw - 160px)"
+        priority
         className="lightbox-image"
         onClick={(event) => event.stopPropagation()}
       />

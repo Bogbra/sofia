@@ -55,7 +55,7 @@ export function Artwork({
       x: value ? 1.13 : 1,
       y: value ? 1.13 : 1,
       z: 1,
-      duration: 0.5,
+      duration: prefersReducedMotion() ? 0 : 0.5,
       ease: "power3.out",
     });
   };

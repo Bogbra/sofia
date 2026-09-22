@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ArtworkSpec } from "@/lib/artworks";
 
 export function GalleryFallback({
@@ -16,7 +17,14 @@ export function GalleryFallback({
           className="gallery-fallback-item"
           onClick={() => onSelect(index)}
         >
-          <img src={item.thumbSrc} alt={item.title} loading="lazy" />
+          <Image
+            src={item.thumbSrc}
+            alt={item.alt}
+            width={item.width}
+            height={item.height}
+            sizes="(max-width: 600px) 100vw, 220px"
+            loading="lazy"
+          />
           <span>{item.title}</span>
         </button>
       ))}
