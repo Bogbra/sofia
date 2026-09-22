@@ -49,7 +49,10 @@
 
 ::selection {
   background-color: var(--selection);
-  color: var(--ink);
+  /* Fixed, not --ink: --selection is a constant light pink, so the
+     selected text needs a constant dark color to stay readable in
+     both themes instead of flipping to near-white in dark mode. */
+  color: #11140f;
 }
 
 /* Base reset */
@@ -68,12 +71,15 @@ body {
 }
 
 @media (pointer: fine) {
-  * {
+  /* Gated on .custom-cursor-enabled (set by CustomCursor.tsx once it's
+     mounted and running) so the native cursor isn't hidden if JS/hydration
+     fails and the custom cursor never takes over. */
+  .custom-cursor-enabled * {
     cursor: none !important;
   }
 
-  input,
-  textarea {
+  .custom-cursor-enabled input,
+  .custom-cursor-enabled textarea {
     cursor: auto !important;
   }
 }
@@ -457,16 +463,6 @@ button {
 .legal-links a:focus-visible {
   color: var(--emphasis);
   text-decoration: underline;
-}
-
-.project-credit {
-  grid-column: 3;
-  justify-self: end;
-  color: var(--ink);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.3;
-  letter-spacing: 0.02em;
 }
 
 /* Home and 3D gallery */
@@ -1020,13 +1016,6 @@ button {
     gap: 14px;
     transform: translateX(-50%);
     white-space: nowrap;
-  }
-
-  .project-credit {
-    position: absolute;
-    right: var(--frame-x);
-    bottom: 8px;
-    font-size: 12px;
   }
 
   .hero-title h1 {

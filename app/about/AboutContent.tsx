@@ -34,9 +34,9 @@ export default function AboutContent() {
           <figure className="about-image">
             <Image
               src="/artworks/Sofia.webp"
-              alt="Sofia"
-              width={1200}
-              height={1600}
+              alt="Sofia standing in a dimly lit underground parking garage, checking her phone under a fluorescent light."
+              width={2731}
+              height={4096}
               sizes="(max-width: 900px) 100vw, 40vw"
               loading="lazy"
               style={{

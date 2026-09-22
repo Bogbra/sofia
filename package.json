@@ -2,8 +2,12 @@
   "name": "sofia",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run generate:gallery-thumbs",
     "build": "next build",
     "start": "next start",
     "check": "tsc --noEmit",

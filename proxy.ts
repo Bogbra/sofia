@@ -1,5 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// script-src and style-src keep 'unsafe-inline' rather than a nonce or hash.
+// A nonce needs Next to inject it into every request-specific inline
+// script it generates (the RSC payload chunks it streams inline are
+// different on every build/page, so they can't be hash-allow-listed), and
+// nonces only work with dynamic rendering — this site is fully static, and
+// forcing per-request rendering site-wide is a worse tradeoff than
+// 'unsafe-inline' for a static portfolio with no user-generated content.
+// style-src additionally can't use a nonce/hash at all here: GSAP animates
+// via element.style.* on every frame, and that has no allow-listing
+// mechanism (only <style> tags do, not the style="" attribute).
 export function proxy(_request: NextRequest) {
   const isDev = process.env.NODE_ENV === "development";
 

@@ -63,7 +63,6 @@ export default function ThemeToggle() {
       className="theme-toggle"
       data-active={theme}
       onClick={toggle}
-      aria-pressed={theme === "light"}
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
     >
       <span className="theme-toggle-track">

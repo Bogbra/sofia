@@ -9,7 +9,7 @@
 //
 //   npm run generate:gallery-thumbs
 
-import { readdir, mkdir } from "node:fs/promises";
+import { readdir, mkdir, unlink } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -29,6 +29,19 @@ async function main() {
     .filter(
       (entry) => entry.isFile() && entry.name.toLowerCase().endsWith(".webp") && !EXCLUDE.has(entry.name)
     );
+
+  // Remove stale thumbnails whose source was deleted or renamed, so
+  // getArtworks() never picks up a gallery/ entry with no original behind it.
+  const expected = new Set(files.map((file) => file.name));
+  const existingThumbs = (await readdir(GALLERY_DIR, { withFileTypes: true })).filter(
+    (entry) => entry.isFile() && entry.name.toLowerCase().endsWith(".webp")
+  );
+  for (const thumb of existingThumbs) {
+    if (!expected.has(thumb.name)) {
+      await unlink(path.join(GALLERY_DIR, thumb.name));
+      console.log(`removed orphaned gallery/${thumb.name}`);
+    }
+  }
 
   for (const file of files) {
     const input = path.join(ARTWORKS_DIR, file.name);

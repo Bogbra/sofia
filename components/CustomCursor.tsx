@@ -25,6 +25,8 @@ export default function CustomCursor() {
     if (!arrow || !pointer) return;
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
+    document.documentElement.classList.add("custom-cursor-enabled");
+
     let domActive = false;
     let galleryActive = false;
 
@@ -58,6 +60,7 @@ export default function CustomCursor() {
     document.documentElement.addEventListener("mouseleave", handleLeave);
 
     return () => {
+      document.documentElement.classList.remove("custom-cursor-enabled");
       window.removeEventListener("pointermove", handleMove);
       window.removeEventListener("gallery-hover", handleGalleryHover);
       document.documentElement.removeEventListener("mouseleave", handleLeave);

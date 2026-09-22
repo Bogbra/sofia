@@ -45,10 +45,14 @@ export function attachDragListeners(
   element.addEventListener("pointerdown", down);
   element.addEventListener("pointermove", move);
   window.addEventListener("pointerup", up);
+  window.addEventListener("pointercancel", up);
+  element.addEventListener("lostpointercapture", up);
 
   return () => {
     element.removeEventListener("pointerdown", down);
     element.removeEventListener("pointermove", move);
     window.removeEventListener("pointerup", up);
+    window.removeEventListener("pointercancel", up);
+    element.removeEventListener("lostpointercapture", up);
   };
 }

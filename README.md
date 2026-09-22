@@ -36,7 +36,7 @@ Navigation is a fullscreen hamburger menu on every screen size.
 ## Notes
 
 - The contact form requires `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` to be set (see above); without it, submission is blocked client-side and shows an error instead of silently failing.
-- `components/FloatingGallery.tsx` loads downscaled copies of the artwork from `public/artworks/gallery/` (max ~1500 px edge) as WebGL textures to keep GPU memory and transfer size reasonable; the Lightbox still shows the full-resolution originals from `public/artworks/`.
+- `components/FloatingGallery.tsx` loads downscaled copies of the artwork from `public/artworks/gallery/` (max 900 px edge, `npm run generate:gallery-thumbs`) as WebGL textures to keep GPU memory and transfer size reasonable; the Lightbox shows the full-resolution originals from `public/artworks/` through `next/image`.
 - Impressum and Datenschutz already contain the real operator name, address, email and hosting/service disclosures — review them against the actual operator and hosting setup before relying on them.
 
 ## Design system
@@ -53,4 +53,4 @@ Light mode is the default. The toggle button (bottom-left, always visible) switc
 
 ## Accessibility
 
-The shared frame includes a keyboard skip link, visible focus rings, semantic navigation landmarks, `aria-current` for the active page, and high-contrast text. The navigation overlay and image lightbox move focus to their close control on open, trap focus while open, restore focus to the trigger on close, and are dismissible with `Escape`. Since the collection images live inside a WebGL canvas, `components/FloatingGallery.tsx` also renders a visually-hidden (focus-visible) list of buttons so the collection is reachable and operable by keyboard and screen readers, not just by pointer. `prefers-reduced-motion` is honored both in CSS and in the GSAP/`useFrame` animations (entrance tweens, hover scale, the floating gallery's idle auto-rotation and bobbing).
+The shared frame includes a keyboard skip link, visible focus rings, semantic navigation landmarks, `aria-current` for the active page, and high-contrast text. The navigation overlay and image lightbox move focus to their close control on open, trap focus while open, restore focus to the trigger on close, and are dismissible with `Escape`. Since the collection images live inside a WebGL canvas, `components/FloatingGallery.tsx` also renders a visually-hidden (focus-visible) list of buttons so the collection is reachable and operable by keyboard and screen readers, not just by pointer. `prefers-reduced-motion` is honored both in CSS and in the GSAP/`useFrame` animations (entrance tweens, hover scale, the floating gallery's idle auto-rotation and bobbing). The 3D gallery itself needs WebGL and JavaScript (it's loaded with `ssr: false`); `app/HomeContent.tsx` renders a `<noscript>` grid of plain links to the full-resolution images so the collection stays browsable — and crawlable — without either.

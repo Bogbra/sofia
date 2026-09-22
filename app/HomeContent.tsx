@@ -43,6 +43,24 @@ export default function HomeContent({ artworks }: { artworks: ArtworkSpec[] }) {
       <div ref={root} className="home-stage">
         <FloatingGallery artworks={artworks} />
 
+        {/* The 3D gallery needs WebGL + JS (see FloatingGallery's dynamic
+            import with ssr: false) and renders nothing without them. This
+            keeps the collection browsable — and its images crawlable — even
+            then; browsers strip <noscript> content entirely once JS runs. */}
+        <noscript>
+          <div className="gallery-fallback">
+            {artworks.map((item) => (
+              <a key={item.src} className="gallery-fallback-item" href={item.src}>
+                {/* next/image needs a browser that runs JS; a plain <img> is
+                    the honest fallback for the no-JS path this renders in. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={item.thumbSrc} alt={item.alt} loading="lazy" />
+                <span>{item.title}</span>
+              </a>
+            ))}
+          </div>
+        </noscript>
+
         <header className="hero-title" aria-label="Sofia's Visual Archive">
           <h1>Sofia’s</h1>
           <p>Visual Archive</p>
