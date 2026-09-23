@@ -36,7 +36,11 @@ export function proxy(_request: NextRequest) {
 export const config = {
   matcher: [
     {
-      source: "/((?!_next/static|_next/image|favicon.ico).*)",
+      // Excludes any path with a file extension (gallery/lightbox WebP
+      // textures, SVGs, the og-image, etc.) so the proxy — and the CSP
+      // header it sets, which only matters for HTML documents — doesn't
+      // run on every asset request.
+      source: "/((?!api|_next/static|_next/image|.*\\..*).*)",
       missing: [
         { type: "header", key: "next-router-prefetch" },
         { type: "header", key: "purpose", value: "prefetch" },

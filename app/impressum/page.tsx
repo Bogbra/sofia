@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
+import { ogImage } from "@/lib/site";
 import SiteFrame from "@/components/SiteFrame";
+
+const description = "Impressum for Sofia's Visual Archive.";
 
 export const metadata: Metadata = {
   title: "Impressum",
+  description,
   alternates: { canonical: "/impressum" },
+  openGraph: { title: "Impressum — Sofia", description, url: "/impressum", images: [ogImage], type: "website" },
+  twitter: { title: "Impressum — Sofia", description, images: [ogImage.url] },
 };
 
 export default function ImpressumPage() {

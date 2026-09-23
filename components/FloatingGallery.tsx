@@ -11,10 +11,10 @@ function checkWebglSupport() {
   if (typeof window === "undefined") return true;
   try {
     const canvas = document.createElement("canvas");
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
-    );
+    // three.js dropped WebGLRenderer's WebGL1 fallback in r163, so a
+    // device with WebGL1 but no WebGL2 can pass a WebGL1-only check here
+    // and then still fail to construct the renderer.
+    return !!canvas.getContext("webgl2");
   } catch {
     return false;
   }

@@ -1,9 +1,21 @@
 import type { Metadata } from "next";
+import { ogImage } from "@/lib/site";
 import SiteFrame from "@/components/SiteFrame";
+
+const description = "Datenschutzerklärung for Sofia's Visual Archive.";
 
 export const metadata: Metadata = {
   title: "Datenschutz",
+  description,
   alternates: { canonical: "/datenschutz" },
+  openGraph: {
+    title: "Datenschutz — Sofia",
+    description,
+    url: "/datenschutz",
+    images: [ogImage],
+    type: "website",
+  },
+  twitter: { title: "Datenschutz — Sofia", description, images: [ogImage.url] },
 };
 
 export default function DatenschutzPage() {

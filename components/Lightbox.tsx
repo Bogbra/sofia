@@ -99,7 +99,7 @@ export default function Lightbox({
         width={current.width}
         height={current.height}
         sizes="(max-width: 600px) calc(100vw - 60px), (max-width: 900px) calc(100vw - 100px), calc(100vw - 160px)"
-        priority
+        loading="eager"
         className="lightbox-image"
         onClick={(event) => event.stopPropagation()}
       />

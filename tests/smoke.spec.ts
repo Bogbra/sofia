@@ -183,6 +183,24 @@ test("falls back to a plain grid when WebGL is unavailable", async ({ page }) =>
   await expect(page.locator(".lightbox-image")).toBeVisible();
 });
 
+test("falls back when WebGL1 exists but WebGL2 is unavailable", async ({ page }) => {
+  await page.addInitScript(() => {
+    // three.js (r163+) requires WebGL2; a device offering only WebGL1
+    // must still be treated as unsupported.
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, contextId: string, ...args: unknown[]) {
+      if (contextId === "webgl2") return null;
+      if (contextId === "webgl" || contextId === "experimental-webgl") return {};
+      return (original as (...a: unknown[]) => unknown).apply(this, [contextId, ...args]);
+    } as typeof HTMLCanvasElement.prototype.getContext;
+  });
+
+  await page.goto("/");
+
+  await expect(page.locator(".gallery-fallback")).toBeVisible();
+  await expect(page.locator("canvas")).toHaveCount(0);
+});
+
 test.describe("no JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 

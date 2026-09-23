@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Inter } from "next/font/google";
-import { siteUrl } from "@/lib/site";
+import { ogImage, siteName, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const bebasNeue = Bebas_Neue({
@@ -16,33 +16,33 @@ const inter = Inter({
   display: "swap",
 });
 
-const title = "Sofia's Visual Archive";
 const description =
   "Sofia's visual archive is a personal portfolio for visual stories, quiet observations and selected work.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: title,
+    default: siteName,
     template: "%s — Sofia",
   },
   description,
+  alternates: { canonical: "/" },
   icons: {
     icon: "/fav-icon.svg",
   },
   openGraph: {
-    title,
+    title: siteName,
     description,
     url: siteUrl,
-    siteName: title,
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: title }],
+    siteName,
+    images: [ogImage],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title,
+    title: siteName,
     description,
-    images: ["/og-image.jpg"],
+    images: [ogImage.url],
   },
 };
 
