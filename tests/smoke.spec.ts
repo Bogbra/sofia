@@ -178,6 +178,11 @@ test("falls back to a plain grid when WebGL is unavailable", async ({ page }) =>
   await expect(page.locator(".gallery-fallback")).toBeVisible();
   await expect(page.locator("canvas")).toHaveCount(0);
 
+  // The hero title and "Drag to explore" hint only make sense over the
+  // draggable 3D sphere; they shouldn't sit on top of the scrollable grid.
+  await expect(page.locator(".hero-title")).toHaveCount(0);
+  await expect(page.locator(".drag-hint")).toHaveCount(0);
+
   const firstItem = page.locator(".gallery-fallback-item").first();
   await firstItem.click();
   await expect(page.locator(".lightbox-image")).toBeVisible();

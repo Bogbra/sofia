@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import SiteFrame from "@/components/SiteFrame";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -13,6 +13,11 @@ const FloatingGallery = dynamic(() => import("@/components/FloatingGallery"), {
 
 export default function HomeContent({ artworks }: { artworks: ArtworkSpec[] }) {
   const root = useRef<HTMLDivElement>(null);
+  // Optimistic default: the 3D gallery is the common case, and
+  // FloatingGallery reports the real value right after it mounts (see
+  // checkWebglSupport()). The hero title and drag hint only make sense
+  // over the draggable sphere, not the scrollable fallback grid.
+  const [webglAvailable, setWebglAvailable] = useState(true);
 
   useEffect(() => {
     const reduced = prefersReducedMotion();
@@ -41,7 +46,7 @@ export default function HomeContent({ artworks }: { artworks: ArtworkSpec[] }) {
   return (
     <SiteFrame>
       <div ref={root} className="home-stage">
-        <FloatingGallery artworks={artworks} />
+        <FloatingGallery artworks={artworks} onWebglAvailableChange={setWebglAvailable} />
 
         {/* The 3D gallery needs WebGL + JS (see FloatingGallery's dynamic
             import with ssr: false) and renders nothing without them. This
@@ -61,12 +66,16 @@ export default function HomeContent({ artworks }: { artworks: ArtworkSpec[] }) {
           </div>
         </noscript>
 
-        <header className="hero-title" aria-label="Sofia's Visual Archive">
-          <h1>Sofia’s</h1>
-          <p>Visual Archive</p>
-        </header>
+        {webglAvailable && (
+          <>
+            <header className="hero-title" aria-label="Sofia's Visual Archive">
+              <h1>Sofia’s</h1>
+              <p>Visual Archive</p>
+            </header>
 
-        <p className="drag-hint">Drag to explore</p>
+            <p className="drag-hint">Drag to explore</p>
+          </>
+        )}
       </div>
     </SiteFrame>
   );

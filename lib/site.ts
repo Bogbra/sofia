@@ -1,4 +1,4 @@
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sofias-photography.vercel.app";
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sofias-visual-archive.vercel.app";
 
 export const siteName = "Sofia's Visual Archive";
 

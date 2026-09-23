@@ -31,7 +31,7 @@ Navigation is a fullscreen hamburger menu on every screen size.
 ## Environment variables
 
 - `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` — required for the contact form to actually send mail. Get a free key at [web3forms.com](https://web3forms.com/) (just an email address, no dashboard login) and set it in `.env.local` for local development and in the Vercel project's Environment Variables for production.
-- `NEXT_PUBLIC_SITE_URL` — the canonical production URL (e.g. `https://sofia-photography.de`), used for `metadataBase`, OpenGraph/Twitter URLs, `sitemap.xml` and `robots.txt` (see `lib/site.ts`). Falls back to `https://sofias-photography.vercel.app` if unset. Update this instead of editing `app/layout.tsx`/`app/robots.ts`/`app/sitemap.ts` when the domain changes.
+- `NEXT_PUBLIC_SITE_URL` — the canonical production URL (e.g. `https://sofia-photography.de`), used for `metadataBase`, OpenGraph/Twitter URLs, `sitemap.xml` and `robots.txt` (see `lib/site.ts`). Falls back to `https://sofias-visual-archive.vercel.app` if unset — set it explicitly in the Vercel project's Environment Variables rather than relying on the fallback matching, since a Vercel project rename changes the `.vercel.app` domain. Update this instead of editing `app/layout.tsx`/`app/robots.ts`/`app/sitemap.ts` when the domain changes.
 
 ## Notes
 

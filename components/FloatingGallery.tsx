@@ -20,7 +20,13 @@ function checkWebglSupport() {
   }
 }
 
-export default function FloatingGallery({ artworks }: { artworks: ArtworkSpec[] }) {
+export default function FloatingGallery({
+  artworks,
+  onWebglAvailableChange,
+}: {
+  artworks: ArtworkSpec[];
+  onWebglAvailableChange?: (available: boolean) => void;
+}) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [webglAvailable, setWebglAvailable] = useState(() => checkWebglSupport());
   // Mounting the Canvas triggers the WebGL scene's one-time setup cost
@@ -28,6 +34,10 @@ export default function FloatingGallery({ artworks }: { artworks: ArtworkSpec[] 
   // for an idle moment lets the browser paint the header/hero text first
   // instead of that work competing with initial hydration.
   const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    onWebglAvailableChange?.(webglAvailable);
+  }, [webglAvailable, onWebglAvailableChange]);
 
   useEffect(() => {
     if (typeof window.requestIdleCallback === "function") {

@@ -21,6 +21,10 @@ export function Scene({
   const dragDistance = useRef(0);
   const reducedMotion = useRef(false);
   const { gl, viewport } = useThree();
+  // Responsive target scale (see the `scale` prop below): the entrance
+  // tween animates toward this, not a hardcoded 1, so it doesn't snap the
+  // sphere to full size on narrower viewports once the tween completes.
+  const scale = viewport.width < 7 ? 0.72 : viewport.width < 11 ? 0.86 : 1;
 
   useEffect(() => {
     return attachDragListeners(gl.domElement, { drag, rotation, velocity, dragDistance });
@@ -35,9 +39,13 @@ export function Scene({
     const reduced = prefersReducedMotion();
     gsap.fromTo(
       world.current.scale,
-      { x: reduced ? 1 : 0.62, y: reduced ? 1 : 0.62, z: reduced ? 1 : 0.62 },
-      { x: 1, y: 1, z: 1, duration: reduced ? 0 : 2.2, ease: "expo.out", delay: reduced ? 0 : 0.2 }
+      { x: reduced ? scale : scale * 0.62, y: reduced ? scale : scale * 0.62, z: reduced ? scale : scale * 0.62 },
+      { x: scale, y: scale, z: scale, duration: reduced ? 0 : 2.2, ease: "expo.out", delay: reduced ? 0 : 0.2 }
     );
+    // Intentionally one-time (mount only), like the rest of this entrance
+    // animation — a later viewport change re-applies the new `scale` via
+    // the declarative prop below, not this tween.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useFrame((state, delta) => {
@@ -53,8 +61,6 @@ export function Scene({
       ? 0
       : Math.sin(state.clock.elapsedTime * 0.32) * 0.12;
   });
-
-  const scale = viewport.width < 7 ? 0.72 : viewport.width < 11 ? 0.86 : 1;
 
   return (
     <group ref={world} scale={scale}>
