@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Lightbox from "@/components/Lightbox";
 import type { ArtworkSpec } from "@/lib/artworks";
 import { GalleryFallback } from "@/components/gallery/GalleryFallback";
@@ -23,6 +23,20 @@ function checkWebglSupport() {
 export default function FloatingGallery({ artworks }: { artworks: ArtworkSpec[] }) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [webglAvailable, setWebglAvailable] = useState(() => checkWebglSupport());
+  // Mounting the Canvas triggers the WebGL scene's one-time setup cost
+  // (renderer/program creation, 16 texture uploads) synchronously. Waiting
+  // for an idle moment lets the browser paint the header/hero text first
+  // instead of that work competing with initial hydration.
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(() => setReady(true), { timeout: 200 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const id = window.setTimeout(() => setReady(true), 0);
+    return () => window.clearTimeout(id);
+  }, []);
 
   return (
     <div
@@ -41,22 +55,24 @@ export default function FloatingGallery({ artworks }: { artworks: ArtworkSpec[] 
             ))}
           </ul>
 
-          <Canvas
-            dpr={[1, 1.75]}
-            frameloop={lightboxIndex !== null ? "never" : "always"}
-            camera={{ position: [0, 0, 11.8], fov: 42, near: 0.1, far: 100 }}
-            gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
-            onCreated={({ gl }) => {
-              gl.domElement.addEventListener("webglcontextlost", (event) => {
-                event.preventDefault();
-                setWebglAvailable(false);
-              });
-            }}
-          >
-            <Suspense fallback={null}>
-              <Scene artworks={artworks} onSelect={setLightboxIndex} />
-            </Suspense>
-          </Canvas>
+          {ready && (
+            <Canvas
+              dpr={[1, 1.75]}
+              frameloop={lightboxIndex !== null ? "never" : "always"}
+              camera={{ position: [0, 0, 11.8], fov: 42, near: 0.1, far: 100 }}
+              gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+              onCreated={({ gl }) => {
+                gl.domElement.addEventListener("webglcontextlost", (event) => {
+                  event.preventDefault();
+                  setWebglAvailable(false);
+                });
+              }}
+            >
+              <Suspense fallback={null}>
+                <Scene artworks={artworks} onSelect={setLightboxIndex} />
+              </Suspense>
+            </Canvas>
+          )}
         </>
       ) : (
         <GalleryFallback artworks={artworks} onSelect={setLightboxIndex} />
