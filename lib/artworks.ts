@@ -29,7 +29,6 @@ const ALT_TEXT: Record<string, string> = {
   Blatt: "Close-up of a prayer plant leaf with dark patterns along red veins.",
   Building: "A high-rise clad in a colorful checkerboard facade, seen from street level.",
   Jazz: "A pianist in a floral shirt plays an upright piano beside a double bass and guitar.",
-  Jovan: "A performer raps from atop a stage monitor, pointing toward the crowd at an outdoor festival.",
   MFH: "A young man in a black bomber jacket sits in an empty bathtub.",
   Mirror: "A mirrored, egg-shaped rooftop pavilion reflecting the sky above a riverside building.",
   Mood: "A woman exhales smoke in profile, tattoos visible on her raised hand, in front of a mural.",

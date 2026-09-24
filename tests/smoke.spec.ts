@@ -213,7 +213,7 @@ test.describe("no JavaScript", () => {
     await page.goto("/");
 
     const items = page.locator(".gallery-fallback-item");
-    await expect(items).toHaveCount(16);
+    await expect(items).toHaveCount(15);
     await expect(items.first()).toHaveAttribute("href", /\/artworks\/.+\.webp$/);
   });
 });
